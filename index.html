@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Evernorth</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body { 
+            width: 100%;
+            overflow-x: hidden;
+            background: #f4f6f8; 
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+            color: #333; 
+        }
+
+        .page { 
+            width: 100%;
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: #f4f6f8; 
+            min-height: 100vh; 
+            padding-bottom: 90px; 
+            position: relative;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+        
+        /* Shared Header (Cart/Payment) */
+        .header { 
+            padding: 18px; 
+            font-size: 26px; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            color: #222;
+        }
+        
+        /* Specific Header for Order Page to match Image */
+        .order-page-header {
+            padding: 20px 20px 5px;
+            font-size: 16px;
+            color: #555;
+        }
+        .order-page-brand {
+            padding: 5px 20px 15px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .brand { 
+            font-size: 30px; 
+            font-weight: 700; 
+            padding: 10px 18px; 
+        }
+        .restaurant { 
+            font-size: 24px; 
+            padding: 0 18px 18px; 
+            color: #555;
+        }
+        
+        .card { 
+            background: #fff; 
+            margin: 0 12px; 
+            border-radius: 14px; 
+            padding: 15px; 
+            box-shadow: 0 1px 4px rgba(0,0,0,.08); 
+        }
+        .food-card { 
+            display: flex; 
+            justify-content: space-between; 
+        }
+        
+        .non-veg-symbol {
+            color: #e43b4f;
+            border: 2px solid #e43b4f;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-bottom: 8px;
+            border-radius: 3px;
+        }
+
+        .food-name { 
+            font-size: 22px; 
+            margin-top: 5px; 
+            font-weight: 500;
+        }
+        .price { 
+            margin-top: 80px; 
+            font-size: 18px; 
+            color: #444;
+        }
+        .food-img { 
+            width: 120px; 
+            height: 120px; 
+            border-radius: 10px; 
+            object-fit: cover; 
+        }
+        
+        .summary { padding: 12px 18px; }
+        .summary-title { 
+            font-size: 24px; 
+            margin: 25px 0 12px; 
+            color: #222;
+        }
+        .row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 16px 0; 
+            font-size: 18px; 
+            color: #444;
+        }
+        .total { 
+            font-weight: bold; 
+            font-size: 20px; 
+            color: #111;
+        }
+        
+        .orange-btn { 
+            position: fixed; 
+            bottom: 15px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 92%;
+            max-width: 560px;
+            height: 55px; 
+            border: none; 
+            border-radius: 12px; 
+            background: #ea580c; 
+            color: white; 
+            font-size: 18px; 
+            font-weight: 600; 
+            cursor: pointer; 
+        }
+        
+        .wallet-card { 
+            background: #fff; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-top: 10px; 
+            box-shadow: 0 1px 4px rgba(0,0,0,.08); 
+        }
+        .method { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            padding: 18px 0; 
+            font-size: 18px; 
+        }
+        
+        .banner { 
+            margin: 0 20px 15px; 
+            background: #e1f1f8; 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            color: #496b7a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-card { 
+            background: #fff; 
+            margin: 0 20px; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,.05); 
+            border: 1px solid #eef1f3;
+        }
+        .status-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+        }
+        
+        #orderId {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .restaurant-name {
+            font-size: 15px;
+            color: #555; 
+        }
+        .preparing { 
+            font-size: 15px; 
+            font-weight: 600; 
+            color: #2b3a4a; 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* Edge-to-edge QR configuration */
+        #qr { 
+            display: block; 
+            margin: 25px auto; 
+            width: 100%; 
+            height: auto;
+            aspect-ratio: 1 / 1;
+            background: #fff; 
+            /* Optional image rendering tweak to ensure squares remain razor-sharp */
+            image-rendering: pixelated; 
+        }
+        .used { opacity: .35; }
+
+        .serve-link { 
+            color: #777; 
+            font-size: 15px; 
+            text-align: center; 
+            margin-top: 25px; 
+            cursor: pointer; 
+            text-decoration: underline; 
+        }
+        .note { 
+            color: #555; 
+            font-size: 14px; 
+            line-height: 1.5; 
+            padding: 15px 10px 5px; 
+            text-align: center;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eaeaea; 
+            margin: 18px 0;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            width: 85%;
+            max-width: 350px;
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .modal-text {
+            font-size: 16px;
+            color: #222;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-cancel {
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+        }
+        .btn-yes {
+            background: #ea580c;
+            border: 1px solid #ea580c;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="page">
+        
+        <!-- CART SECTION -->
+        <div id="cart" class="section active">
+            <div class="header"> ← Cart Summary </div>
+            <div class="brand" style="color:#ea580c;"> Evernorth </div>
+            <div class="restaurant"> Extn. Spice of Life </div>
+            
+            <div class="card">
+                <div class="food-card">
+                    <div>
+                        <div class="non-veg-symbol">▲</div>
+                        <div class="food-name"> Chicken Biryani </div>
+                        <div class="price"> ₹121.00 </div>
+                    </div>
+                    <img class="food-img" src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnKPVGeqTf_BNaN_C5JYGmESXRMmsIYiiBfVouSMPEOHM28kUZAf8j6PL0IemYxsZEH2JtnSlXBK-0ZlMN0gSg5G25lk2CjnujrEmg0HvyFSb25y_6D8GDM98oxy7oeXIBNHba8ObS8p-Os=w138-h138-n-k-no" alt="Chicken Biryani">
+                </div>
+            </div>
+            
+            <div class="summary">
+                <div class="summary-title"> Payment Summary </div>
+                <div class="row"> <span>Subtotal</span> <span>₹121.00</span> </div>
+                <div class="row"> <span>Total Tax</span> <span>₹0.00</span> </div>
+                <hr>
+                <div class="row total"> <span>Total</span> <span>₹121.00</span> </div>
+            </div>
+            
+            <button class="orange-btn" onclick="showPayment()"> Proceed </button>
+        </div>
+        
+        <!-- PAYMENT SECTION -->
+        <div id="payment" class="section">
+            <div class="header">
+                <span onclick="backToCart()" style="cursor:pointer;">←</span>
+                <span>Payments</span>
+            </div>
+            
+            <div class="summary">
+                <div class="summary-title"> Payment Summary </div>
+                <div class="card" style="margin: 0;">
+                    <div class="row"> <span>Subtotal</span> <span>₹121.00</span> </div>
+                    <div class="row"> <span>Total Tax</span> <span>₹0.00</span> </div>
+                    <hr>
+                    <div class="row total"> <span>Total</span> <span>₹121.00</span> </div>
+                </div>
+                
+                <div class="summary-title"> eWallet </div>
+                <div class="wallet-card" style="margin: 0;">
+                    <div class="method">
+                        ✅ FoodBook Wallet
+                        <span style="margin-left:auto;">₹121.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="orange-btn" onclick="placeOrder()"> Place Order </button>
+        </div>
+        
+        <!-- ORDER SECTION -->
+        <div id="order" class="section">
+            <div class="order-page-header"> Your Order Details </div>
+            <div class="order-page-brand"> Evernorth </div>
+            
+            <div class="banner"> 
+                <span style="font-size:16px;">💡</span> Please show this screen to collect order 
+            </div>
+            
+            <div class="order-card">
+                <div class="status-row">
+                    <div>
+                        <div id="orderId"></div>
+                        <div class="restaurant-name">Extn. Spice of Life</div>
+                    </div>
+                    <div class="preparing" id="orderStatus">PREPARING 🍲</div>
+                </div>
+                <hr>
+                
+                <img id="qr" alt="QR Code">
+                
+                <div class="serve-link" id="serveText" onclick="openModal()"> Order Served? </div>
+                <div class="note"> Your food is for immediate consumption after it is served to you </div>
+            </div>
+            
+            <button class="orange-btn" onclick="location.reload();"> Back to Home </button>
+
+            <!-- Popup Modal -->
+            <div id="serveModal" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="modal-text">
+                        Kindly ensure that you press this button only when you have received your order.
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="modal-btn btn-cancel" onclick="closeModal()">Cancel</button>
+                        <button class="modal-btn btn-yes" onclick="confirmServed()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        function showPayment() {
+            document.getElementById("cart").classList.remove("active");
+            document.getElementById("payment").classList.add("active");
+        }
+
+        function placeOrder() {
+            const hex = Math.floor(Math.random() * 0xFFFFFF).toString(16).toUpperCase().padStart(6, '0');
+            const orderId = "ID: C113E" + hex.substring(0, 3); 
+            document.getElementById("orderId").innerText = orderId;
+            
+            // To force exactly a 33x33 module grid (Version 4 QR Code), the string length matters.
+            // Version 4 with ECC 'M' maxes out at ~90 alphanumeric characters.
+            // This 63-character dummy padding + the ~12 character orderId gives us exactly ~75 chars total.
+            // This perfectly locks the QR generator into outputting a Version 4 (33x33) grid.
+            const padding = " - GLOBAL FEAST - ORDER VALIDATION PAYLOAD EXACT LENGTH FOR V4";
+            const payload = orderId + padding;
+            
+            // Using ecc=M (Medium Error Correction) and margin=0
+            const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=500x500&margin=0&ecc=M&data=" + encodeURIComponent(payload);
+            
+            document.getElementById("qr").src = qrUrl;
+            
+            document.getElementById("payment").classList.remove("active");
+            document.getElementById("order").classList.add("active");
+        }
+
+        function openModal() {
+            if (document.getElementById("orderStatus").innerText.includes("SERVED")) {
+                return;
+            }
+            document.getElementById("serveModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("serveModal").style.display = "none";
+        }
+
+        function confirmServed() {
+            closeModal();
+            document.getElementById("qr").classList.add("used");
+            
+            let serveText = document.getElementById("serveText");
+            serveText.innerText = "Order served";
+            serveText.style.color = "#28a745";
+            serveText.style.textDecoration = "none";
+            
+            document.getElementById("orderStatus").innerText = "SERVED";
+        }
+
+        function backToCart() {
+            document.getElementById("payment").classList.remove("active");
+            document.getElementById("cart").classList.add("active");
+        }
+    </script>
+</body>
+</html>
