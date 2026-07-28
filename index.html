@@ -26,7 +26,7 @@
             margin: 0 auto; 
             background: #f4f6f8; 
             min-height: 100vh; 
-            padding-bottom: 90px; 
+            padding-bottom: 110px; 
             position: relative;
         }
 
@@ -44,7 +44,7 @@
             color: #222;
         }
         
-        /* Specific Header for Order Page to match Image */
+        /* Specific Header for Order Page */
         .order-page-header {
             padding: 20px 20px 5px;
             font-size: 16px;
@@ -144,6 +144,7 @@
             font-size: 18px; 
             font-weight: 600; 
             cursor: pointer; 
+            z-index: 10;
         }
         
         .wallet-card { 
@@ -200,7 +201,7 @@
         }
         .preparing { 
             font-size: 15px; 
-            font-weight: 600; 
+            font-weight: 700; 
             color: #2b3a4a; 
             display: flex;
             align-items: center;
@@ -215,7 +216,6 @@
             height: auto;
             aspect-ratio: 1 / 1;
             background: #fff; 
-            /* Optional image rendering tweak to ensure squares remain razor-sharp */
             image-rendering: pixelated; 
         }
         .used { opacity: .35; }
@@ -235,6 +235,57 @@
             padding: 15px 10px 5px; 
             text-align: center;
         }
+        
+        /* ORDER DETAILS & CREDITS APPLIED SECTION (INCREASED SPACING) */
+        .details-title { 
+            font-size: 18px; 
+            font-weight: 600; 
+            margin: 25px 20px 12px; 
+            color: #111;
+        }
+        .details-card { 
+            background: #fff; 
+            margin: 0 20px; 
+            border-radius: 12px; 
+            border: 1px solid #dbe2e8;
+            box-shadow: 0 1px 4px rgba(0,0,0,.03);
+            overflow: hidden;
+        }
+        .details-group {
+            padding: 16px 20px; /* Increased group padding */
+            border-bottom: 1px solid #eef2f5;
+        }
+        .details-group.no-border {
+            border-bottom: none;
+        }
+        .details-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 12px 0; /* Increased margin between rows */
+            font-size: 15px; 
+            color: #333;
+            line-height: 1.5; /* Added clean line spacing */
+        }
+        .details-row:first-child {
+            margin-top: 2px;
+        }
+        .details-row:last-child {
+            margin-bottom: 2px;
+        }
+        .details-row.bold { 
+            font-weight: 700; 
+            color: #111; 
+            font-size: 16px;
+        }
+        .ref-number {
+            margin: 20px 20px 40px;
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         hr {
             border: none;
             border-top: 1px solid #eaeaea; 
@@ -301,14 +352,14 @@
         <div id="cart" class="section active">
             <div class="header"> ← Cart Summary </div>
             <div class="brand" style="color:#ea580c;"> Evernorth </div>
-            <div class="restaurant"> Extn. Spice of Life </div>
+            <div class="restaurant"> Extn. Spice Of Life </div>
             
             <div class="card">
                 <div class="food-card">
                     <div>
                         <div class="non-veg-symbol">▲</div>
                         <div class="food-name"> Chicken Biryani </div>
-                        <div class="price"> ₹121.00 </div>
+                        <div class="price"> ₹115.24 </div>
                     </div>
                     <img class="food-img" src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnKPVGeqTf_BNaN_C5JYGmESXRMmsIYiiBfVouSMPEOHM28kUZAf8j6PL0IemYxsZEH2JtnSlXBK-0ZlMN0gSg5G25lk2CjnujrEmg0HvyFSb25y_6D8GDM98oxy7oeXIBNHba8ObS8p-Os=w138-h138-n-k-no" alt="Chicken Biryani">
                 </div>
@@ -316,8 +367,8 @@
             
             <div class="summary">
                 <div class="summary-title"> Payment Summary </div>
-                <div class="row"> <span>Subtotal</span> <span>₹121.00</span> </div>
-                <div class="row"> <span>Total Tax</span> <span>₹0.00</span> </div>
+                <div class="row"> <span>Subtotal</span> <span>₹115.24</span> </div>
+                <div class="row"> <span>Total Tax ⓘ</span> <span>₹5.76</span> </div>
                 <hr>
                 <div class="row total"> <span>Total</span> <span>₹121.00</span> </div>
             </div>
@@ -335,8 +386,8 @@
             <div class="summary">
                 <div class="summary-title"> Payment Summary </div>
                 <div class="card" style="margin: 0;">
-                    <div class="row"> <span>Subtotal</span> <span>₹121.00</span> </div>
-                    <div class="row"> <span>Total Tax</span> <span>₹0.00</span> </div>
+                    <div class="row"> <span>Subtotal</span> <span>₹115.24</span> </div>
+                    <div class="row"> <span>Total Tax ⓘ</span> <span>₹5.76</span> </div>
                     <hr>
                     <div class="row total"> <span>Total</span> <span>₹121.00</span> </div>
                 </div>
@@ -366,9 +417,9 @@
                 <div class="status-row">
                     <div>
                         <div id="orderId"></div>
-                        <div class="restaurant-name">Extn. Spice of Life</div>
+                        <div class="restaurant-name">Extn. Spice Of Life</div>
                     </div>
-                    <div class="preparing" id="orderStatus">PREPARING 🍲</div>
+                    <div class="preparing" id="orderStatus">PREPARED 🥗</div>
                 </div>
                 <hr>
                 
@@ -376,6 +427,50 @@
                 
                 <div class="serve-link" id="serveText" onclick="openModal()"> Order Served? </div>
                 <div class="note"> Your food is for immediate consumption after it is served to you </div>
+            </div>
+            
+            <!-- ORDER DETAILS SECTION -->
+            <div class="details-title"> Order details </div>
+            <div class="details-card">
+                <!-- Group 1: Dates -->
+                <div class="details-group">
+                    <div class="details-row"> <span>Order date</span> <span id="dyn-date">22 Jul 2026</span> </div>
+                    <div class="details-row"> <span>Order time</span> <span id="dyn-time">12:47 PM</span> </div>
+                </div>
+                
+                <!-- Group 2: Items -->
+                <div class="details-group">
+                    <div class="details-row"> <span>1 x Chicken Biryani</span> <span>₹115.24</span> </div>
+                </div>
+                
+                <!-- Group 3: Taxes -->
+                <div class="details-group">
+                    <div class="details-row"> <span>Subtotal</span> <span>₹115.24</span> </div>
+                    <div class="details-row"> <span>Total Taxⓘ</span> <span>₹5.76</span> </div>
+                </div>
+                
+                <!-- Group 4: Total -->
+                <div class="details-group no-border">
+                    <div class="details-row bold"> <span>Total</span> <span>₹121.00</span> </div>
+                </div>
+            </div>
+
+            <!-- CREDITS APPLIED SECTION (WITH EXPANDED LINE SPACING) -->
+            <div class="details-title"> Credits Applied </div>
+            <div class="details-card">
+                <div class="details-group no-border">
+                    <div class="details-row"> <span>User Credits</span> <span>- ₹121.00</span> </div>
+                    <div class="details-row"> <span>Balance Amount Paid</span> <span>₹0.00</span> </div>
+                </div>
+            </div>
+
+            <!-- REFERENCE NUMBER WITH COPY ICON -->
+            <div class="ref-number">
+                <span id="dyn-ref">Reference number : </span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
             </div>
             
             <button class="orange-btn" onclick="location.reload();"> Back to Home </button>
@@ -397,6 +492,21 @@
     </div>
 
     <script>
+        function formatAMPM(date) {
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return hours + ':' + minutes + ' ' + ampm;
+        }
+
+        function formatDate(date) {
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
+        }
+
         function showPayment() {
             document.getElementById("cart").classList.remove("active");
             document.getElementById("payment").classList.add("active");
@@ -407,20 +517,23 @@
             const orderId = "ID: C113E" + hex.substring(0, 3); 
             document.getElementById("orderId").innerText = orderId;
             
-            // To force exactly a 33x33 module grid (Version 4 QR Code), the string length matters.
-            // Version 4 with ECC 'M' maxes out at ~90 alphanumeric characters.
-            // This 63-character dummy padding + the ~12 character orderId gives us exactly ~75 chars total.
-            // This perfectly locks the QR generator into outputting a Version 4 (33x33) grid.
+            const now = new Date();
+            document.getElementById("dyn-date").innerText = formatDate(now);
+            document.getElementById("dyn-time").innerText = formatAMPM(now);
+            
+            const timestampSuffix = Date.now().toString().slice(-14);
+            document.getElementById("dyn-ref").innerText = "Reference number : " + orderId.replace("ID: ", "E") + timestampSuffix;
+            
             const padding = " - GLOBAL FEAST - ORDER VALIDATION PAYLOAD EXACT LENGTH FOR V4";
             const payload = orderId + padding;
-            
-            // Using ecc=M (Medium Error Correction) and margin=0
+
             const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=500x500&margin=0&ecc=M&data=" + encodeURIComponent(payload);
-            
+
             document.getElementById("qr").src = qrUrl;
-            
+
             document.getElementById("payment").classList.remove("active");
             document.getElementById("order").classList.add("active");
+            window.scrollTo(0,0);
         }
 
         function openModal() {
